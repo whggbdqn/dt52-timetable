@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.bdqn.mapper.CourseMapper" >
+  <resultMap id="BaseResultMap" type="cn.bdqn.pojo.Course" >
+    <id column="course_pk" property="coursePk" jdbcType="INTEGER" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="course_content" property="courseContent" jdbcType="VARCHAR" />
+    <result column="dr" property="dr" jdbcType="INTEGER" />
+  </resultMap>
+ <!--  新增课程 -->
+  <insert id="insertCourse" parameterType="cn.bdqn.pojo.Course">
+  	insert into course
+  		(
+  		course_name,
+  		course_content
+  		)
+  	values
+  		(
+  		#{courseName},
+  		#{courseContent}
+  		)
+  </insert>
+  
+  <!-- 删除课程   -->
+  <delete id="deleteCourse" parameterType="Integer">
+  	update course set dr = '1' where course_pk = #{value}
+  </delete>
+  
+  <!-- 更新课程 -->
+  <update id="updateCourse" parameterType="cn.bdqn.pojo.Course">
+  	update course set 
+  		course_name = #{courseName},
+  		course_content = #{courseContent}
+  	where
+  		course_pk = #{coursePk}
+  </update>
+  
+  <!-- 查询所有的课程 -->
+  <select id="getAllCourse" resultMap="BaseResultMap">
+  	select * from course where dr = 0
+  </select>
+  
+  <!-- 根据课程主键查询课程   -->
+  <select id="getCourseById" parameterType="Integer" resultMap="BaseResultMap">
+  	select * from course where dr = 0 and course_pk = #{value}
+  </select>
+  
+  <!-- 根据课程对象查询课程 -->
+  <select id="getCourseByCourse" parameterType="cn.bdqn.pojo.Course" resultMap="BaseResultMap">
+  	select * from course where dr = 0
+  	<if test="courseName!=null and courseName!=''">
+  		and course_name like concat('%',#{courseName},'%')
+  	</if>
+  	<if test="courseContent!=null and courseContent!=''">
+  		and course_content like concat('%',#{courseContent},'%')
+  	</if>
+  </select>
+  
+    <select id="getCourseIdByCourseName" parameterType="String" resultType="Integer">
+select
+  co.course_pk
+from
+  course co
+where
+course_content like #{value};
+	</select> 
+  
+</mapper>

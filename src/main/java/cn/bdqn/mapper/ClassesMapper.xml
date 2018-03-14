@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.bdqn.mapper.ClassesMapper" >
+  <resultMap id="BaseResultMap" type="cn.bdqn.pojo.Classes" >
+    <id column="class_pk" property="classPk" jdbcType="INTEGER" />
+    <result column="stu_num" property="stuNum" jdbcType="INTEGER" />
+    <result column="class_name" property="className" jdbcType="VARCHAR" />
+    <result column="major" property="major" jdbcType="VARCHAR" />
+    <result column="course_id" property="courseId" jdbcType="INTEGER" />
+    <result column="teacher_id" property="teacherId" jdbcType="INTEGER" />
+    <result column="instructor_id" property="instructorId" jdbcType="INTEGER" />
+    <result column="dr" property="dr" jdbcType="INTEGER" />
+  </resultMap>
+ 
+ <select id="getAllClasses" resultMap="BaseResultMap">
+	select * from classes where dr=0
+ </select>
+ 
+  <select id="getClassesById" resultMap="BaseResultMap" parameterType="Integer">
+	select * from classes where class_pk = #{value} and dr=0
+ </select>
+ 
+   <select id="getClassesByClasses" resultMap="BaseResultMap" parameterType="cn.bdqn.pojo.Classes">
+	select * from classes where dr=0 
+	<if test="className!=null and className!=''">
+	and class_name like concat('%',#{className},'%')
+	</if>
+	<if test="major!=null and major!=''">
+	and major like concat('%',#{major},'%')
+	</if>
+	<if test="teacherId!=null and teacherId!=0">
+	and teacher_id = #{teacherId}
+	</if>
+	<if test="instructorId!=null and instructorId!=0">
+	and instructor_id = #{instructorId}
+	</if>
+	
+ </select>
+ 
+ <insert id="insertClasses" parameterType="cn.bdqn.pojo.Classes" >
+ insert into classes (
+  stu_num,
+  class_name,
+  major,
+  course_id,
+  teacher_id,
+  instructor_id
+)
+values
+  (
+    #{stuNum},
+    #{className},
+    #{major},
+    #{courseId},
+    #{teacherId},
+    #{instructorId}
+  )
+ </insert>
+ 
+ <delete id="deleteByClassesId" parameterType="Integer">
+update
+  classes
+set
+  dr = '1'
+where class_pk = #{value}
+ </delete>
+ 
+ <update id="updateByClasses" parameterType="cn.bdqn.pojo.Classes">
+update
+  classes
+set
+  stu_num = #{stuNum},
+  class_name = #{className},
+  major = #{major},
+  course_id = #{courseId},
+  teacher_id = #{teacherId},
+  instructor_id = #{instructorId}
+where class_pk = #{classPk};
+ </update> 
+ 
+ <select id="getClassesIdByClassesName" parameterType="String" resultType="Integer">
+select
+  cl.class_pk
+from
+  classes cl
+where
+ class_name like #{value};
+</select> 
+ 
+</mapper>

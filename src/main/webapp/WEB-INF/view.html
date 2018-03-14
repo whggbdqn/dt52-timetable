@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>查看课表</title>
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		  <!-- Bootstrap 3.3.7 -->
+		  <link rel="stylesheet" href="static/bootstrap.min.css">
+		  <!-- Font Awesome -->
+		  <link rel="stylesheet" href="static/font-awesome.min.css">
+		  <!-- Ionicons -->
+		  <link rel="stylesheet" href="static/ionicons.min.css">
+		  <!-- Theme style -->
+		  <link rel="stylesheet" href="static/AdminLTE.min.css">
+		  <!-- DataTables -->
+  			<link rel="stylesheet" href="static/dataTables.bootstrap.min.css">
+		  <!-- AdminLTE Skins. Choose a skin from the css/skins
+		       folder instead of downloading all of them to reduce the load. -->
+		  <link rel="stylesheet" href="static/_all-skins.min.css">
+		  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+	</head>
+	<body>
+		<div class="box-body">
+              <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+              	<div class="row">
+              		<div class="col-sm-6">
+              			<div class="dataTables_length" id="example1_length">
+              			</div>
+              		</div>
+              		<div class="col-sm-6">
+              			<div id="example1_filter" class="dataTables_filter">
+              				<label>Search:<input class="form-control input-sm" placeholder="" aria-controls="example1" type="search"></label>
+              			</div>
+              		</div>
+              </div>
+              <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">课表</h3>
+            </div>
+<!--             <input type="button" class="btn btn-primary pull-left" value="自动排课" id="auto"/> -->
+<!--             <a href="login.do"><input type="button" class="btn btn-primary pull-left" value="清空课表"/></a> -->
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div id="jsTimeTable">                
+					<table class="table table-bordered table-hover">
+					<thead>
+					    <tr>
+					      <th rowspan="2" class="center middle">日期</th>
+					      <th rowspan="2" class="center middle">教室</th>
+					      <th colspan="3">上午8:30-12:30</th>
+					      <th colspan="3">下午2：00-6：00</th>
+					      <th colspan="3">晚上6:30-8:30</th>
+					    </tr>
+					    <tr>
+					    <th>班级名称</th><th>教师姓名</th><th>课程内容</th>
+					    <th>班级名称</th><th>教师姓名</th><th>课程内容</th>
+					    <th>班级名称</th><th>教师姓名</th><th>课程内容</th>
+					    </tr>
+					    </thead>
+					    <tbody></tbody>
+					</table>                
+                </div>
+        	</div>
+		</div>
+	</div>
+</div>
+              </div>
+            </div>
+            <a href="export.do"><input type="button" class="btn btn-primary pull-right" value="导出课表" id="export"/></a>
+              
+            
+            <script src="static/jquery-2.2.3.min.js"></script>
+			<!-- Bootstrap 3.3.6 -->
+			<script src="static/bootstrap.min.js"></script>
+		
+			<script src="static/adminlte.min.js"></script>
+			
+			<script type="text/javascript" src="static/timetable.js"></script>
+			
+            
+            <script type="text/javascript">
+//             var tt;
+    		$(function() {
+    			tt = timetable({
+    				id : "jsTimeTable",
+    				url : "classTime4week.do",
+    				date : new Date().getFirstDate().format("yyyy-MM-dd")
+    			});
+    			console.log(tt);
+    			tt.refresh();
+    		
+
+//     		function open(elem) {
+//     			if (document.createEvent) {
+//     				var e = document.createEvent("MouseEvents");
+//     				e.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0,
+//     						0, false, false, false, false, 0, null);
+//     				//e.initMouseEvent("mousedown") //据说不要参数也可以
+//     				elem[0].dispatchEvent(e);
+//     			} else if (element.fireEvent) {
+//     				elem[0].fireEvent("onmousedown");
+//     			}
+//     		}
+
+
+ 	  		tt.clean();
+            	$.ajax({
+						type:"POST",
+						url:"viewSchedule.do",
+						success: function(result){
+							tt.loadJsonData(result);
+						}
+                	}); 
+
+    		});
+//                 	$(document).ready(function(e) {
+//                 	         tt.clean();
+//                 	    	 $.ajax({
+//                 					type:"POST",
+//                 					url:"viewSchedule.do",
+//                 					success: function(result){
+//                 						tt.loadJsonData(result);
+//                 					}
+//                 	     	})
+//                 	 });	
+                	
+		
+            </script>
+            
+	</body>
+</html>
